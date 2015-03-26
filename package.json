@@ -1,0 +1,12 @@
+{
+  "name": "cleanTorrents",
+  "version": "0.1.0",
+  "description": "clean your torrents",
+  "main": "cleanTorrent.js",
+  "dependencies": {
+    "MD5": "^1.2.1",
+    "parse-torrent": "^4.0.0"
+  },
+  "author": "acwong",
+  "license": "MIT"
+}
