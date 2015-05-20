@@ -1,18 +1,19 @@
-var fs = require("fs"),
+var nt = require("nt"),
     parseTorrent = require('parse-torrent');
 
-function main() {
-    var dir = "./.new/";
-    var files = fs.readdir(dir, function(err, files) {
-        if (!err) {
-            for (var i = 0; i < files.length; i++) {
-                var infoHash = parseTorrent(fs.readFileSync(dir + files[i])).infoHash;
-                console.log(parseTorrent.toMagnetURI({
-                    infoHash: infoHash
-                }));
+function main(argv) {
+    argv.forEach(function (item) {
+        nt.read(item, function (err, torrent) {
+            if (err) {
+                console.log(item + "无效");
+                return;
             }
-        }
+            var url = parseTorrent.toMagnetURI({
+                infoHash: torrent.infoHash()
+            });
+            console.log(url);
+        });
     })
 }
 
-main();
+main(process.argv.slice(2));

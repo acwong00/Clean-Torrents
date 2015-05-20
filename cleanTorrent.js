@@ -7,9 +7,6 @@ var path = require('path'),
 function main (argv) {
     argv.forEach(function (item) {
         var dir = path.resolve(path.dirname(item), "New");
-        if (!fs.existsSync(dir)) {
-            fs.mkdir(dir);
-        }
         nt.read(item, function (err, torrent) {
             if (err) {
                 console.log(item + '无效');
@@ -17,6 +14,9 @@ function main (argv) {
             }
             var metadata = new Metadata(torrent.metadata);
             torrent.metadata = metadata.cleanMetadata();
+            if (!fs.existsSync(dir)) {
+                fs.mkdir(dir);
+            }
             torrent.createWriteStream(path.resolve(dir, metadata.getName() + ".torrent"));
         });
     });
