@@ -17,6 +17,5 @@ node cleanTorrent ./torrents
 
 ```
 node torrent2Margnet xxx.torrent
-
 node torrent2Margnet ./torrents
 ```
