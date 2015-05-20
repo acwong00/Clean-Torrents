@@ -25,6 +25,7 @@ function main(argv) {
                     });
                 });
             }
+        });
     });
 }
 
