@@ -1,24 +1,47 @@
 var path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
     nt = require('nt'),
-    md5 = require('MD5'),
     Metadata = require('./lib/Metadata.js');
 
-function main (argv) {
+function main(argv) {
     argv.forEach(function (item) {
-        var dir = path.resolve(path.dirname(item), "New");
-        nt.read(item, function (err, torrent) {
+        fs.stat(item, function (err, stats) {
             if (err) {
-                console.log(item + '无效');
+                console.log(item + " 文件或目录路径无效");
                 return;
             }
-            var metadata = new Metadata(torrent.metadata);
-            torrent.metadata = metadata.cleanMetadata();
-            if (!fs.existsSync(dir)) {
-                fs.mkdir(dir);
+            if (stats.isFile()) {
+                createCleanTorrent(item);
+            } else if (stats.isDirectory()) {
+                fs.readdir(item, function (err, files) {
+                    if (err) {
+                        return;
+                    }
+                    files.forEach(function (file) {
+                        // 忽略子文件夹
+                        if (fs.statSync(path.resolve(item, file)).isFile()) {
+                            createCleanTorrent(path.resolve(item, file));
+                        }
+                    });
+                });
             }
-            torrent.createWriteStream(path.resolve(dir, metadata.getName() + ".torrent"));
-        });
+    });
+}
+
+function createCleanTorrent(torrentPath) {
+    var dir = path.resolve(path.dirname(torrentPath), "New");
+    nt.read(torrentPath, function (err, torrent) {
+        if (err) {
+            console.log(item + ' 无效');
+            return;
+        }
+        var metadata = new Metadata(torrent.metadata);
+        torrent.metadata = metadata.cleanMetadata();
+        if (!fs.existsSync(dir)) {
+            fs.mkdir(dir);
+        }
+        torrent.createWriteStream(path.resolve(dir, metadata.getName() + ".torrent"));
+        console.log(metadata.getName() + ".torrent " + "success!");
     });
 }
 
