@@ -39,7 +39,7 @@ function createCleanTorrent(torrentPath) {
         var metadata = new Metadata(torrent.metadata);
         torrent.metadata = metadata.cleanMetadata();
         if (!fs.existsSync(dir)) {
-            fs.mkdir(dir);
+            fs.mkdirSync(dir);
         }
         torrent.createWriteStream(path.resolve(dir, metadata.getName() + ".torrent"));
         console.log(metadata.getName() + ".torrent " + "success!");
