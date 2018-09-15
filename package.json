@@ -6,7 +6,8 @@
   "dependencies": {
     "MD5": "^1.2.1",
     "nt": "^0.5.0",
-    "parse-torrent": "^4.0.0"
+    "parse-torrent": "^4.0.0",
+    "mime": "^1.2.11"
   },
   "author": "acwong",
   "license": "MIT"
